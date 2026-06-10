@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrate — Momento Yogui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #3d7a8a;
+    --azul-oscuro: #2a5a6a;
+    --azul-claro: #6aaab8;
+    --azul-palido: #c8dfe5;
+    --azul-niebla: #e8f3f6;
+    --blanco: #fafcfd;
+    --texto: #1a3540;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--blanco);
+    color: var(--texto);
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* ── PANEL IZQUIERDO: PAQUETE ── */
+  .panel-paquete {
+    background: linear-gradient(150deg, #1a3a4a 0%, #1e4a5c 60%, #2a6070 100%);
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel-paquete::before {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -60px;
+    width: 300px; height: 300px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cellipse cx='100' cy='155' rx='60' ry='18' fill='white' opacity='0.06'/%3E%3Ccircle cx='100' cy='100' r='22' fill='white' opacity='0.06'/%3E%3Cline x1='100' y1='122' x2='100' y2='155' stroke='white' stroke-width='3' opacity='0.06'/%3E%3Cline x1='100' y1='115' x2='68' y2='138' stroke='white' stroke-width='2.5' opacity='0.06'/%3E%3Cline x1='100' y1='115' x2='132' y2='138' stroke='white' stroke-width='2.5' opacity='0.06'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  .logo-link {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    margin-bottom: 3rem;
+    display: block;
+  }
+  .logo-link span { font-style: italic; color: #7bbdd4; }
+
+  /* Estado: sin paquete */
+  .panel-sin-paquete { display: none; }
+  .panel-con-paquete { display: none; }
+
+  .panel-sin-paquete .texto-bienvenida {
+    color: white;
+  }
+  .panel-sin-paquete .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7bbdd4;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .panel-sin-paquete .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 1.8rem; height: 1px;
+    background: #7bbdd4;
+  }
+  .panel-sin-paquete h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 1.2rem;
+  }
+  .panel-sin-paquete h2 em { font-style: italic; color: #7bbdd4; }
+  .panel-sin-paquete p {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 340px;
+  }
+
+  /* Estado: con paquete */
+  .paquete-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7bbdd4;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .paquete-label::before {
+    content: '';
+    display: inline-block;
+    width: 1.6rem; height: 1px;
+    background: #7bbdd4;
+  }
+
+  .paquete-card-mini {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 1.8rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+  }
+  .paquete-emoji-grande { font-size: 2.2rem; margin-bottom: 0.8rem; }
+  .paquete-nombre {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 300;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 0.3rem;
+  }
+  .paquete-tagline {
+    color: #7bbdd4;
+    font-size: 0.82rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+  .paquete-incluye-titulo {
+    color: rgba(255,255,255,0.35);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+  .paquete-incluye { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+  .paquete-incluye li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.8rem;
+  }
+  .paquete-incluye li::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #7bbdd4;
+    flex-shrink: 0;
+  }
+
+  .paquete-precio {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .paquete-precio-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: white;
+  }
+  .paquete-precio-nota {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.75rem;
+  }
+
+  .volver-link {
+    color: rgba(255,255,255,0.35);
+    font-size: 0.78rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .volver-link:hover { color: rgba(255,255,255,0.65); }
+
+  /* ── PANEL DERECHO: FORMULARIO ── */
+  .panel-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3.5rem;
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .form-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--azul);
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+  }
+
+  .form-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+    font-weight: 300;
+    color: var(--azul-oscuro);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+  .form-titulo em { font-style: italic; color: var(--azul); }
+
+  .form-subtitulo {
+    color: #4a6a75;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 2rem;
+  }
+
+  /* Tabs login / registro */
+  .form-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid var(--azul-palido);
+  }
+  .form-tab {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #7a9aa5;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+  .form-tab.activo { color: var(--azul); border-bottom-color: var(--azul); }
+
+  /* Campos */
+  .campo {
+    margin-bottom: 1.1rem;
+  }
+  .campo label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--azul-oscuro);
+    margin-bottom: 0.4rem;
+  }
+  .campo input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid var(--azul-palido);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: var(--texto);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .campo input:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(61,122,138,0.1);
+  }
+  .campo input::placeholder { color: #aac0c8; }
+
+  /* Mensajes de error */
+  .campo-error {
+    font-size: 0.75rem;
+    color: #e05a5a;
+    margin-top: 0.3rem;
+    display: none;
+  }
+  .campo.con-error input { border-color: #e05a5a; }
+  .campo.con-error .campo-error { display: block; }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--azul);
+    color: white;
+    border: none;
+    border-radius: 3rem;
+    padding: 1rem;
+    font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 30px rgba(61,122,138,0.25);
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { background: var(--azul-oscuro); transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .form-nota {
+    text-align: center;
+    font-size: 0.78rem;
+    color: #7a9aa5;
+    margin-top: 1.2rem;
+  }
+  .form-nota a { color: var(--azul); text-decoration: none; }
+  .form-nota a:hover { text-decoration: underline; }
+
+  /* ── ESTADO ÉXITO ── */
+  .estado-exito {
+    display: none;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  .exito-icono { font-size: 3rem; margin-bottom: 1rem; }
+  .exito-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--azul-oscuro);
+    margin-bottom: 0.5rem;
+  }
+  .exito-desc {
+    color: #4a6a75;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 1.8rem;
+  }
+  .btn-ir-paquete {
+    display: inline-block;
+    background: var(--azul);
+    color: white;
+    text-decoration: none;
+    border-radius: 3rem;
+    padding: 1rem 2.4rem;
+    font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 30px rgba(61,122,138,0.25);
+    transition: all 0.2s;
+  }
+  .btn-ir-paquete:hover { background: var(--azul-oscuro); transform: translateY(-1px); }
+
+  /* Responsive */
+  @media (max-width: 780px) {
+    body { grid-template-columns: 1fr; }
+    .panel-paquete { padding: 3rem 1.5rem 2rem; min-height: auto; }
+    .panel-form { padding: 2.5rem 1.5rem; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PANEL IZQUIERDO -->
+<div class="panel-paquete">
+  <a href="index.html" class="logo-link">momento <span>yogui</span></a>
+
+  <!-- Sin paquete -->
+  <div class="panel-sin-paquete" id="panel-sin-paquete">
+    <div class="texto-bienvenida">
+      <p class="eyebrow">Bienvenida</p>
+      <h2>Tu espacio<br>para <em>sentir</em></h2>
+      <p>Accedé a tu biblioteca personal: clases de yoga, meditaciones guiadas y herramientas para escuchar tu cuerpo.</p>
+    </div>
+  </div>
+
+  <!-- Con paquete pre-seleccionado -->
+  <div class="panel-con-paquete" id="panel-con-paquete">
+    <p class="paquete-label">Estás por comprar</p>
+
+    <div class="paquete-card-mini">
+      <div class="paquete-emoji-grande" id="pq-emoji"></div>
+      <h3 class="paquete-nombre" id="pq-nombre"></h3>
+      <p class="paquete-tagline" id="pq-tagline"></p>
+      <p class="paquete-incluye-titulo">Incluye</p>
+      <ul class="paquete-incluye" id="pq-incluye"></ul>
+    </div>
+
+    <div class="paquete-precio">
+      <span class="paquete-precio-num">$15 USD</span>
+      <span class="paquete-precio-nota">pago único · acceso permanente</span>
+    </div>
+
+    <br><br>
+    <a href="biblioteca.html" class="volver-link">← Ver todos los paquetes</a>
+  </div>
+</div>
+
+<!-- PANEL DERECHO -->
+<div class="panel-form">
+
+  <!-- Formulario -->
+  <div id="contenido-form">
+    <p class="form-eyebrow" id="form-eyebrow-txt">Crear cuenta</p>
+    <h1 class="form-titulo" id="form-titulo-txt">Unite a <em>Momento Yogui</em></h1>
+    <p class="form-subtitulo" id="form-subtitulo-txt">Creá tu cuenta gratis y accedé a tu práctica.</p>
+
+    <div class="form-tabs">
+      <button class="form-tab activo" id="tab-registro" onclick="cambiarTab('registro')">Crear cuenta</button>
+      <button class="form-tab" id="tab-login" onclick="cambiarTab('login')">Ya tengo cuenta</button>
+    </div>
+
+    <!-- FORM REGISTRO -->
+    <div id="form-registro">
+      <div class="campo" id="campo-nombre">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" placeholder="¿Cómo te llamás?">
+        <p class="campo-error">Ingresá tu nombre</p>
+      </div>
+      <div class="campo" id="campo-email-reg">
+        <label for="email-reg">Email</label>
+        <input type="email" id="email-reg" placeholder="tu@email.com">
+        <p class="campo-error">Ingresá un email válido</p>
+      </div>
+      <div class="campo" id="campo-pass-reg">
+        <label for="pass-reg">Contraseña</label>
+        <input type="password" id="pass-reg" placeholder="Mínimo 6 caracteres">
+        <p class="campo-error">La contraseña debe tener al menos 6 caracteres</p>
+      </div>
+      <button class="btn-submit" id="btn-registrar" onclick="handleRegistro()">
+        <span id="btn-reg-texto">Crear cuenta</span>
+      </button>
+      <p class="form-nota">Al registrarte aceptás los <a href="#">términos de uso</a>.</p>
+    </div>
+
+    <!-- FORM LOGIN -->
+    <div id="form-login" style="display:none;">
+      <div class="campo" id="campo-email-log">
+        <label for="email-log">Email</label>
+        <input type="email" id="email-log" placeholder="tu@email.com">
+        <p class="campo-error">Ingresá un email válido</p>
+      </div>
+      <div class="campo" id="campo-pass-log">
+        <label for="pass-log">Contraseña</label>
+        <input type="password" id="pass-log" placeholder="Tu contraseña">
+        <p class="campo-error">Ingresá tu contraseña</p>
+      </div>
+      <button class="btn-submit" id="btn-login" onclick="handleLogin()">Ingresar</button>
+      <p class="form-nota"><a href="#">¿Olvidaste tu contraseña?</a></p>
+    </div>
+  </div>
+
+  <!-- Estado éxito -->
+  <div class="estado-exito" id="estado-exito">
+    <div class="exito-icono">✨</div>
+    <h2 class="exito-titulo">¡Bienvenida!</h2>
+    <p class="exito-desc" id="exito-desc">Tu cuenta fue creada. Ahora podés acceder a tu práctica.</p>
+    <a href="#" class="btn-ir-paquete" id="btn-ir-paquete">Ir a mi paquete →</a>
+  </div>
+
+</div>
+
+<script>
+  // ── DATOS DE PAQUETES ──
+  const PAQUETES = {
+    'yoga-para-la-ansiedad':      { emoji:'🌬️', nombre:'Yoga para la Ansiedad',         tagline:'"Para cuando el cuerpo no puede parar."',      incluye:['Clase de yoga restaurativo · 40 min','Meditación para la ansiedad · 15 min','Pranayama: respiración 4-7-8 · 10 min','Guía PDF descargable'] },
+    'yoga-para-soltar-lo-que-pesa':{ emoji:'🍃', nombre:'Yoga para Soltar lo que Pesa', tagline:'"Para cuando cargás algo que ya no es tuyo."',   incluye:['Clase de yoga de liberación · 45 min','Meditación para soltar · 15 min','Pranayama: respiración de fuego suave · 10 min','Guía PDF descargable'] },
+    'yoga-para-escuchar-tu-cuerpo':{ emoji:'💙', nombre:'Yoga para Escuchar tu Cuerpo', tagline:'"Para reconectar con lo que sentís."',           incluye:['Clase de yoga intuitivo · 45 min','Meditación de escaneo corporal · 15 min','Pranayama: respiración consciente · 10 min','Guía PDF descargable'] },
+    'yoga-para-volver-a-vos':     { emoji:'🌿', nombre:'Yoga para Volver a Vos',        tagline:'"Para cuando te perdiste en el camino."',       incluye:['Clase de yoga introspectivo · 45 min','Meditación de reconexión · 15 min','Pranayama: respiración alternada · 10 min','Guía PDF descargable'] },
+    'yoga-para-cerrar-el-dia':    { emoji:'🌙', nombre:'Yoga para Cerrar el Día',       tagline:'"Para soltar el día y preparar el descanso."', incluye:['Clase de yoga nocturno · 35 min','Meditación para el sueño · 15 min','Pranayama: respiración 4-4-4 · 10 min','Guía PDF descargable'] },
+  };
+
+  // ── LEER PAQUETE DE LA URL ──
+  const params = new URLSearchParams(window.location.search);
+  const slugPaquete = params.get('paquete');
+  const paquete = PAQUETES[slugPaquete] || null;
+
+  // Mostrar panel izquierdo según si hay paquete
+  if (paquete) {
+    document.getElementById('panel-con-paquete').style.display = 'block';
+    document.getElementById('pq-emoji').textContent = paquete.emoji;
+    document.getElementById('pq-nombre').textContent = paquete.nombre;
+    document.getElementById('pq-tagline').textContent = paquete.tagline;
+    const lista = document.getElementById('pq-incluye');
+    paquete.incluye.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      lista.appendChild(li);
+    });
+    // Actualizar textos del form
+    document.getElementById('form-eyebrow-txt').textContent = 'Casi listo';
+    document.getElementById('form-titulo-txt').innerHTML = 'Creá tu cuenta<br><em>y completá la compra</em>';
+    document.getElementById('form-subtitulo-txt').textContent = 'Una vez registrada, te llevamos directo al pago de tu paquete.';
+    document.getElementById('btn-reg-texto').textContent = 'Crear cuenta y comprar';
+  } else {
+    document.getElementById('panel-sin-paquete').style.display = 'block';
+  }
+
+  // ── TABS ──
+  function cambiarTab(tab) {
+    document.getElementById('form-registro').style.display = tab === 'registro' ? 'block' : 'none';
+    document.getElementById('form-login').style.display   = tab === 'login'    ? 'block' : 'none';
+    document.getElementById('tab-registro').className = 'form-tab' + (tab === 'registro' ? ' activo' : '');
+    document.getElementById('tab-login').className    = 'form-tab' + (tab === 'login'    ? ' activo' : '');
+  }
+
+  // ── VALIDACIÓN ──
+  function validarCampo(idCampo, idInput, condicion) {
+    const campo = document.getElementById(idCampo);
+    if (!condicion) { campo.classList.add('con-error'); return false; }
+    campo.classList.remove('con-error');
+    return true;
+  }
+
+  // ── REGISTRO ──
+  function handleRegistro() {
+    const nombre  = document.getElementById('nombre').value.trim();
+    const email   = document.getElementById('email-reg').value.trim();
+    const pass    = document.getElementById('pass-reg').value;
+
+    const okNombre = validarCampo('campo-nombre',   'nombre',   nombre.length > 0);
+    const okEmail  = validarCampo('campo-email-reg','email-reg', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    const okPass   = validarCampo('campo-pass-reg', 'pass-reg',  pass.length >= 6);
+
+    if (!okNombre || !okEmail || !okPass) return;
+
+    // Simular carga
+    const btn = document.getElementById('btn-registrar');
+    btn.disabled = true;
+    btn.textContent = 'Creando cuenta...';
+
+    setTimeout(() => {
+      mostrarExito(nombre);
+    }, 1200);
+  }
+
+  // ── LOGIN ──
+  function handleLogin() {
+    const email = document.getElementById('email-log').value.trim();
+    const pass  = document.getElementById('pass-log').value;
+
+    const okEmail = validarCampo('campo-email-log','email-log', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    const okPass  = validarCampo('campo-pass-log', 'pass-log',  pass.length > 0);
+
+    if (!okEmail || !okPass) return;
+
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true;
+    btn.textContent = 'Ingresando...';
+
+    setTimeout(() => {
+      mostrarExito('');
+    }, 1000);
+  }
+
+  // ── ESTADO ÉXITO ──
+  function mostrarExito(nombre) {
+    document.getElementById('contenido-form').style.display = 'none';
+    const exito = document.getElementById('estado-exito');
+    exito.style.display = 'block';
+
+    if (paquete) {
+      document.getElementById('exito-desc').textContent =
+        (nombre ? nombre + ', ya' : 'Ya') + ' sos parte de Momento Yogui. Ahora completá la compra de tu paquete.';
+      const btnIr = document.getElementById('btn-ir-paquete');
+      btnIr.textContent = 'Ir a ' + paquete.nombre + ' →';
+      // En producción: ir a Mercado Pago. Por ahora, vuelve a la biblioteca
+      btnIr.href = 'biblioteca.html#' + slugPaquete;
+    } else {
+      document.getElementById('exito-desc').textContent =
+        (nombre ? nombre + ', ya' : 'Ya') + ' sos parte de Momento Yogui. Explorá la biblioteca y elegí tu práctica.';
+      document.getElementById('btn-ir-paquete').textContent = 'Ir a mi biblioteca →';
+      document.getElementById('btn-ir-paquete').href = 'biblioteca.html';
+    }
+  }
+
+  // Enter en campos
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const loginVisible = document.getElementById('form-login').style.display !== 'none';
+      loginVisible ? handleLogin() : handleRegistro();
+    }
+  });
+</script>
+
+</body>
+</html>
